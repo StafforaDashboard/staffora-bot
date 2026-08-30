@@ -1,0 +1,26 @@
+{
+  "name": "staffora-bot",
+  "version": "2.0.0",
+  "description": "Staffora – Discord Staff & Fraktions Management",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "tsx watch src/index.ts",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "postinstall": "prisma generate"
+  },
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "discord.js": "^14.22.0",
+    "dotenv": "^16.4.5",
+    "prisma": "^5.22.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0"
+  }
+}
