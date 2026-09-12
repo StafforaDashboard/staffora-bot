@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="staffora-dash" content="settings-galaxy-v2"/>
 <meta http-equiv="Cache-Control" content="no-cache"/>
-<title>STAFFORA BOT · Nova Dashboard</title>
+<title>STAFFORA</title>
 <script>
 (function(){
   var host=(location.hostname||'').toLowerCase();
@@ -431,6 +431,9 @@ html,body{width:100%;height:100%;margin:0;overflow-x:hidden}
 </style>
 
 <style id="staffora-settings-galaxy">
+.settings-shell.settings-shell-main,.settings-shell{
+  min-height:calc(100vh - 100px)!important;
+}
 .settings-shell{
   display:grid;
   grid-template-columns:220px minmax(0,1fr);
@@ -525,7 +528,10 @@ html,body{width:100%;height:100%;margin:0;overflow-x:hidden}
 .set-link:hover{background:rgba(139,92,246,.22)}
 .set-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
 @media(max-width:900px){
-  .settings-shell{grid-template-columns:1fr}
+  .settings-shell.settings-shell-main,.settings-shell{
+  min-height:calc(100vh - 100px)!important;
+}
+.settings-shell{grid-template-columns:1fr}
   .settings-nav{display:flex;flex-wrap:wrap;gap:4px;max-height:none;border-right:0;border-bottom:1px solid rgba(139,92,246,.15)}
   .settings-nav button{width:auto}
 }
@@ -704,7 +710,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
   color:#d4dcff;font-weight:600;font-size:13px;cursor:pointer;transition:background .15s,border-color .15s
 }
 .btn-back:hover{background:rgba(124,108,255,.2);border-color:rgba(167,139,250,.5);color:#fff}
-#staffora-nova-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
+#staffora-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;
   font-size:11px;font-weight:700;background:rgba(124,108,255,.2);color:#c4b5fd;border:1px solid rgba(124,108,255,.3)}
 </style>
 
@@ -713,7 +719,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
 <div id="v-login" class="login-wrap">
   <div class="login-box">
     <div class="logo-mark">🤖</div>
-    <h1>STAFFORA BOT</h1>
+    <h1>STAFFORA</h1>
     <p class="sub">Premium Moderation · Discord + Roblox</p>
     <a class="btn btn-p btn-block" id="btn-login" href="#">Mit Discord anmelden</a>
   </div>
@@ -723,60 +729,28 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
   <aside class="sidebar" id="sidebar">
     <div class="side-brand">
       <div class="mark">🤖</div>
-      <div><strong>STAFFORA BOT</strong><span>Moderation Platform</span></div>
+      <div><strong>STAFFORA</strong><span>Bot</span></div>
     </div>
     <nav class="side-nav">
-      <div class="nav-sec">Übersicht</div>
-      <button type="button" class="nav-btn active" data-p="overview"><span class="ic">📊</span> Übersicht</button>
+      <div class="nav-sec">Haupt</div>
+      <button type="button" class="nav-btn active" data-p="settings"><span class="ic">⚙️</span> Dashboard</button>
+      <button type="button" class="nav-btn" data-p="overview"><span class="ic">📊</span> Übersicht</button>
       <button type="button" class="nav-btn" data-p="activity"><span class="ic">⚡</span> Live Activity</button>
       <button type="button" class="nav-btn" data-p="online"><span class="ic">🟢</span> Online-Status</button>
-      <div class="nav-sec">Server</div>
-      <button type="button" class="nav-btn" data-p="settings"><span class="ic">⚙️</span> Einstellungen</button>
-      
-      <button type="button" class="nav-btn" data-p="modperms"><span class="ic">🛡️</span> Moderation Permissions</button>
-      <button type="button" class="nav-btn" data-p="perms"><span class="ic">🛡️</span> Berechtigungen</button>
+      <div class="nav-sec">Schnellzugriff</div>
       <button type="button" class="nav-btn" data-p="panels"><span class="ic">📨</span> Panels senden</button>
-      <button type="button" class="nav-btn" data-p="embeds"><span class="ic">✏️</span> Embeds bearbeiten</button>
-      <button type="button" class="nav-btn" data-p="rp"><span class="ic">🎭</span> RP Start / Stop</button>
-      <button type="button" class="nav-btn" data-p="commands"><span class="ic">⌨️</span> Commands</button>
-      <button type="button" class="nav-btn" data-p="serverstats"><span class="ic">📈</span> Server-Stats</button>
-      <button type="button" class="nav-btn" data-p="hausliste"><span class="ic">🏠</span> Hausliste</button>
-      <!-- KI removed -->
-      <div class="nav-sec">Systeme</div>
-      <button type="button" class="nav-btn" data-p="ausweis"><span class="ic">🪪</span> Ausweis</button>
-      <button type="button" class="nav-btn" data-p="modreasons"><span class="ic">⚖️</span> Verstoßgründe</button>
-      <button type="button" class="nav-btn" data-p="complaint"><span class="ic">📢</span> Team-Beschwerde</button>
       <button type="button" class="nav-btn" data-p="tickets"><span class="ic">🎫</span> Tickets</button>
-      <button type="button" class="nav-btn" data-p="feedback"><span class="ic">⭐</span> Feedback</button>
-      <button type="button" class="nav-btn" data-p="flynametag"><span class="ic">✈️</span> Fly & Nametag</button>
-      <button type="button" class="nav-btn" data-p="xp"><span class="ic">✨</span> XP</button>
-      <button type="button" class="nav-btn" data-p="duty"><span class="ic">⏱️</span> Duty</button>
-      <button type="button" class="nav-btn" data-p="dizzy"><span class="ic">🎮</span> Dizzy Control</button>
-      <button type="button" class="nav-btn" data-p="partner"><span class="ic">🤝</span> Partnerschaft</button>
-      
-      <div class="nav-sec">Support / Voice</div>
-      
-      <button type="button" class="nav-btn" data-p="admincall"><span class="ic">📞</span> Admin Call</button>
-      <button type="button" class="nav-btn" data-p="warteraum"><span class="ic">🎧</span> Warteraum</button>
-      <button type="button" class="nav-btn" data-p="offices"><span class="ic">🏢</span> Büros</button>
-      
-      
-      <button type="button" class="nav-btn" data-p="interviews"><span class="ic">🗣️</span> Interviews</button>
-      <button type="button" class="nav-btn" data-p="giveaway"><span class="ic">🎉</span> Giveaways</button>
-      <button type="button" class="nav-btn" data-p="suggest"><span class="ic">💡</span> Vorschläge</button>
-      <button type="button" class="nav-btn" data-p="factions"><span class="ic">🏛️</span> Fraktionen</button>
-      <button type="button" class="nav-btn" data-p="dn"><span class="ic">🔢</span> Dienstnummern</button>
-      <button type="button" class="nav-btn" data-p="bewerbung"><span class="ic">📝</span> Bewerbungen</button>
-      <button type="button" class="nav-btn" data-p="roblox"><span class="ic">🎮</span> Roblox Lookup</button>
       <button type="button" class="nav-btn" data-p="team"><span class="ic">👥</span> Team</button>
-      <button type="button" class="nav-btn" data-p="unban-q"><span class="ic">❓</span> Unban-Fragen</button>
-      <div class="nav-sec">Moderation</div>
-      <button type="button" class="nav-btn" data-p="search"><span class="ic">🔍</span> Roblox-Suche</button>
       <button type="button" class="nav-btn" data-p="bans"><span class="ic">🔨</span> Bans</button>
-      <button type="button" class="nav-btn" data-p="unban-req"><span class="ic">🔓</span> Ban Appeals</button>
-      <button type="button" class="nav-btn" data-p="links"><span class="ic">🔗</span> Roblox Links</button>
-      <div class="nav-sec">IC Panel</div>
+      <button type="button" class="nav-btn" data-p="roblox"><span class="ic">🎮</span> Roblox Lookup</button>
+      <div class="nav-sec">Extras</div>
+      <button type="button" class="nav-btn" data-p="modperms"><span class="ic">🛡️</span> Mod-Permissions</button>
+      <button type="button" class="nav-btn" data-p="commands"><span class="ic">⌨️</span> Commands</button>
+      <button type="button" class="nav-btn" data-p="embeds"><span class="ic">✏️</span> Embeds</button>
+      <button type="button" class="nav-btn" data-p="perms"><span class="ic">🔐</span> Berechtigungen</button>
+      <div class="nav-sec">Links</div>
       <a class="nav-btn" href="ingame.html" style="text-decoration:none"><span class="ic">🎮</span> IC Panel →</a>
+      <a class="nav-btn" href="unban.html" style="text-decoration:none"><span class="ic">🔓</span> Ban Appeal →</a>
     </nav>
     <div class="side-mini" id="side-mini">
         <a href="./ingame.html">IC Panel</a>
@@ -822,7 +796,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
     try{ localStorage.setItem('staffora_token', token); }catch(e){}
     try{ sessionStorage.setItem('staffora_token', token); }catch(e){}
   }
-  var me=null, guilds=[], guildId=null, page='overview';
+  var me=null, guilds=[], guildId=null, page='settings';
 
   function $(id){return document.getElementById(id)}
   function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]})}
@@ -1050,7 +1024,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
       else if(page==='feedback') await pageFeedbackCfg(p);
       else if(page==='flynametag') await pageFlyNametag(p);
       else if(page==='xp') await pageXp(p);
-      else if(page==='modules') { page='overview'; await pageOverview(p); }
+      else if(page==='modules') { page='settings'; sessionStorage.setItem('staffora_set_cat','modules'); await pageSettings(p); }
       else if(page==='modperms') await pageModPerms(p);
       else if(page==='perms') await pagePerms(p);
       else if(page==='panels') await pagePanels(p);
@@ -2148,7 +2122,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
       return rr.map(function(r,i){return {roleId:String(r.id),name:r.name,order:i+1}});
     }
     p.innerHTML=
-      '<div class="nova-hero"><div><span id="staffora-nova-badge">NOVA · TEAM</span>'+
+      '<div class="nova-hero"><div><span id="staffora-badge">NOVA · TEAM</span>'+
       '<h1 style="margin-top:8px">Team & Ränge</h1>'+
       '<p class="desc" style="margin:6px 0 0">Auto-Nick, Ranglaufbahn und Teamliste</p></div></div>'+
       '<div class="nova-grid">'+
@@ -3457,7 +3431,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
 
     function render(){
       p.innerHTML=
-        '<div class="nova-hero"><div><span id="staffora-nova-badge">NOVA · TICKETS</span>'+
+        '<div class="nova-hero"><div><span id="staffora-badge">NOVA · TICKETS</span>'+
         '<h1 style="margin-top:8px">Ticket-System</h1>'+
         '<p class="desc" style="margin:6px 0 0">Mehrere Panels · Typen · Vorschau · Auslastung optional</p></div>'+
         '<button type="button" class="btn btn-p" id="tp-add">+ Panel</button></div>'+
@@ -4374,7 +4348,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
       {id:'notify',ic:'🔔',l:'Benachrichtigungen'},
       {id:'system',ic:'🔧',l:'System'}
     ];
-    var activeCat=sessionStorage.getItem('staffora_set_cat')||'hub';
+    var activeCat=sessionStorage.getItem('staffora_set_cat')||'allgemein';
 
     var MOD_LIST=[
       {k:'tickets',l:'Tickets',d:'Support-Tickets mit Claim und KI'},
@@ -4411,10 +4385,10 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
     }
 
     p.innerHTML=
-      '<h1>Einstellungen</h1>'+
-      '<p class="desc">Control Panel · Kategorien links, Details rechts</p>'+
-      '<div class="card" style="border-color:rgba(139,92,246,.45);margin-bottom:14px;padding:12px 16px;background:linear-gradient(90deg,rgba(139,92,246,.15),transparent)"><strong>Galaxy Control Panel</strong> · v2 · Links Kategorien wählen</div>'+
-      '<div class="settings-shell">'+
+      '<h1>Dashboard</h1>'+
+      '<p class="desc">Einstellungen · Kategorien links</p>'+
+      ''+
+      '<div class="settings-shell settings-shell-main">'+
         '<nav class="settings-nav" id="set-nav">'+
           CATS.map(function(c){
             return '<button type="button" data-cat="'+c.id+'" class="'+(c.id===activeCat?'active':'')+'"><span class="ic">'+c.ic+'</span>'+c.l+'</button>';
@@ -4444,7 +4418,7 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
 
       
       if(cat==='hub'){
-        main.innerHTML='<h1>Einstellungen</h1><p class="sdesc">Kategorie wählen</p><div class="nova-grid">'+
+        main.innerHTML='<h1>Dashboard</h1><p class="sdesc">Alle Einstellungen · Kategorie wählen</p><div class="nova-grid">'+
           CATS.map(function(c){
             return '<button type="button" class="nova-panel-card" data-go-cat="'+c.id+'" style="text-align:left;cursor:pointer;width:100%">'+
               '<h3 style="margin:0">'+c.ic+' '+c.l+'</h3></button>';
@@ -4483,8 +4457,8 @@ input[type=checkbox]{appearance:none;-webkit-appearance:none;width:0;height:0;op
 
       if(cat==='design'){
         main.innerHTML=backBtn()+
-          '<h1>🎨 Design & Darstellung</h1><p class="sdesc">Galaxy-Optik und Darstellung</p>'+
-          '<div class="set-card"><h3>Galaxy Design</h3><p class="hint">Dunkles Space-Theme mit Violett-Akzenten (aktiv)</p>'+
+          '<h1>🎨 Design & Darstellung</h1><p class="sdesc">Darstellung und Theme</p>'+
+          '<div class="set-card"><h3>Design</h3><p class="hint">Dunkles Theme mit Akzentfarbe (aktiv)</p>'+
             '<div class="set-row"><div><div class="lbl">Dark Mode</div><div class="sub">Immer aktiv</div></div><span class="badge-on">AN</span></div>'+
             '<div class="set-row"><div><div class="lbl">Akzentfarbe</div><div class="sub">Staffora Lila #8b5cf6</div></div></div>'+
             '<div class="set-row"><div><div class="lbl">Karten-Stil</div><div class="sub">Glass / Border Glow</div></div></div>'+
