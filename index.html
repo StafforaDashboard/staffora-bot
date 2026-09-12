@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>STAFFORA BOT</title>
+<style>
+:root{
+  --bg:#05050a;--panel:#0c0c12;--card:#12121a;--card2:#16161f;
+  --line:rgba(255,255,255,.08);--text:#f1f5f9;--muted:#94a3b8;
+  --accent:#8b5cf6;--cyan:#22d3ee;--green:#34d399;--amber:#fbbf24;--red:#f87171;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%,rgba(139,92,246,.28),transparent 50%),
+    radial-gradient(ellipse 50% 40% at 0% 60%,rgba(34,211,238,.06),transparent),
+    radial-gradient(ellipse 40% 40% at 100% 80%,rgba(109,40,217,.12),transparent);
+}
+a{color:inherit;text-decoration:none}
+.top{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 24px;border-bottom:1px solid var(--line);backdrop-filter:blur(14px);
+  background:rgba(5,5,10,.75);position:sticky;top:0;z-index:40;
+}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px}
+.brand i{width:34px;height:34px;border-radius:11px;background:linear-gradient(145deg,#a78bfa,#6d28d9);display:grid;place-items:center;font-style:normal;box-shadow:0 8px 22px rgba(139,92,246,.35)}
+.nav{display:flex;gap:6px;flex-wrap:wrap}
+.nav a{padding:8px 12px;border-radius:10px;color:var(--muted);font-size:13px;font-weight:500;transition:.15s}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.05)}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 18px;border-radius:12px;font-weight:600;font-size:14px;border:0;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn-p{background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;box-shadow:0 10px 28px rgba(124,58,237,.4)}
+.btn-g{background:rgba(255,255,255,.06);color:#fff;border:1px solid var(--line)}
+
+.hero{text-align:center;padding:64px 20px 36px;max-width:720px;margin:0 auto;animation:up .55s ease both}
+.hero h1{font-size:clamp(2rem,5vw,2.9rem);letter-spacing:-.04em;line-height:1.15}
+.hero h1 b{background:linear-gradient(90deg,#c4b5fd,#8b5cf6,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--muted);margin:14px auto 28px;font-size:1.08rem;line-height:1.6}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+
+.sec-title{text-align:center;padding:48px 16px 8px}
+.sec-title h2{font-size:1.5rem;letter-spacing:-.02em}
+.sec-title p{color:var(--muted);margin-top:8px;font-size:14px}
+
+.feat-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;
+  max-width:1000px;margin:20px auto 0;padding:0 16px 40px;
+}
+.feat{
+  background:rgba(18,18,28,.9);border:1px solid var(--line);border-radius:16px;padding:16px;
+  transition:transform .2s,border-color .2s,box-shadow .2s;animation:up .5s ease both;
+}
+.feat:hover{transform:translateY(-3px);border-color:rgba(139,92,246,.4);box-shadow:0 12px 32px rgba(0,0,0,.35)}
+.feat .ic{font-size:22px;margin-bottom:8px}
+.feat strong{display:block;font-size:14px;margin-bottom:4px}
+.feat span{font-size:12px;color:var(--muted);line-height:1.4}
+
+.demo-head{text-align:center;padding:56px 16px 12px;border-top:1px solid var(--line);margin-top:12px}
+.demo-head h2{font-size:clamp(1.5rem,3vw,2rem)}
+.demo-head h2 b{background:linear-gradient(90deg,#c4b5fd,#22d3ee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.demo-head p{color:var(--muted);margin-top:10px;font-size:14px}
+
+.stage{display:grid;grid-template-columns:minmax(200px,260px) 1fr;gap:18px;max-width:1080px;margin:0 auto;padding:12px 16px 70px}
+@media(max-width:860px){.stage{grid-template-columns:1fr}}
+.mods{display:flex;flex-direction:column;gap:8px}
+.mod{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;
+  background:rgba(18,18,28,.9);border:1px solid var(--line);cursor:pointer;
+  transition:border-color .2s,transform .2s,box-shadow .2s,background .2s;
+}
+.mod:hover{transform:translateX(3px);border-color:rgba(139,92,246,.35)}
+.mod.on{border-color:rgba(34,211,238,.45);background:rgba(34,211,238,.08);box-shadow:0 0 0 1px rgba(34,211,238,.15)}
+.mod .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(255,255,255,.05);font-size:16px}
+.mod strong{display:block;font-size:13px}
+.mod span{font-size:11px;color:var(--muted)}
+.mod .arrow{margin-left:auto;opacity:.4}
+
+.win{background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.45);min-height:400px;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.bar{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);font-size:11px;color:var(--muted)}
+.d{width:9px;height:9px;border-radius:50%}.d.r{background:#ff5f57}.d.y{background:#febc2e}.d.g{background:#28c840}
+.live{margin-left:auto;color:var(--red);font-weight:700;letter-spacing:.06em;font-size:10px}
+.live i{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);margin-right:4px;animation:blink 1.2s infinite}
+@keyframes blink{50%{opacity:.3}}
+.body{display:grid;grid-template-columns:140px 1fr;min-height:360px}
+@media(max-width:600px){.body{grid-template-columns:1fr}}
+.side{padding:14px;border-right:1px solid var(--line);background:rgba(0,0,0,.25);font-size:12px}
+.side h5{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.side a{display:block;padding:7px 8px;border-radius:8px;color:var(--muted);margin-bottom:2px}
+.side a.on{background:rgba(139,92,246,.18);color:#fff}
+.main{padding:16px 18px}
+.main h2{font-size:16px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.chip{font-size:10px;padding:3px 8px;border-radius:999px;font-weight:700;border:1px solid var(--line)}
+.chip.g{background:rgba(52,211,153,.12);color:var(--green);border-color:rgba(52,211,153,.3)}
+.chip.a{background:rgba(251,191,36,.12);color:var(--amber)}
+.chip.p{background:rgba(139,92,246,.15);color:#c4b5fd}
+.sub{color:var(--muted);font-size:12px;margin:4px 0 12px}
+.msg{display:flex;gap:10px;margin:10px 0;animation:msgIn .35s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;flex-shrink:0}
+.av.b{background:#5865f2}.av.s{background:#10b981}.av.u{background:#64748b}
+.bubble{flex:1;font-size:13px;line-height:1.4}
+.bubble .who{font-weight:600;font-size:12px;margin-bottom:2px}
+.bubble .who em{font-style:normal;font-size:10px;color:var(--muted);margin-left:6px}
+.inputbar{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);font-size:12px}
+.card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;background:var(--card2);border:1px solid var(--line);margin-bottom:8px}
+.statg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.stat b{display:block;font-size:18px}.stat span{font-size:10px;color:var(--muted)}
+.progress{height:6px;border-radius:99px;background:rgba(255,255,255,.08);overflow:hidden;margin:8px 0}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,#8b5cf6,#22d3ee);width:0;transition:width .4s}
+.btn-sm{padding:8px 12px;border-radius:8px;border:0;font-size:12px;font-weight:600;cursor:pointer}
+.btn-sm.p{background:var(--accent);color:#fff}.btn-sm.g{background:rgba(52,211,153,.2);color:var(--green)}
+.btn-sm.d{background:rgba(248,113,113,.15);color:var(--red)}.btn-sm.n{background:rgba(255,255,255,.06);color:var(--text)}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.center{text-align:center;padding:32px 16px;color:var(--muted)}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:16px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hint{text-align:center;color:var(--muted);font-size:12px;padding:0 16px 24px}
+.foot{text-align:center;padding:20px;color:#64748b;font-size:12px;border-top:1px solid var(--line)}
+.corner{position:fixed;right:12px;bottom:12px;background:rgba(12,12,18,.95);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:11px;z-index:30;box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.corner a{display:block;color:#94a3b8;margin:2px 0}.corner a:hover{color:#c4b5fd}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><i>🤖</i> STAFFORA</div>
+  <nav class="nav">
+    <a href="#features">Module</a>
+    <a href="#demo">Live Demo</a>
+    <a href="./dashboard.html">Dashboard</a>
+    <a href="./ingame.html">IC Panel</a>
+    <a href="./unban.html">Ban Appeal</a>
+  </nav>
+  <a class="btn btn-p" id="login" href="#">Mit Discord anmelden</a>
+</header>
+
+<section class="hero">
+  <h1>Moderation &amp; RP — <b>ein Bot</b></h1>
+  <p>Tickets, Team, Ausweis, Häuser, Duty, Dizzy, Warteraum und Fraktionen — alles über ein Dashboard.</p>
+  <div class="hero-actions">
+    <a class="btn btn-p" href="./dashboard.html">Dashboard öffnen</a>
+    <a class="btn btn-g" href="#demo">Live Demo ansehen</a>
+  </div>
+</section>
+
+<section class="sec-title" id="features">
+  <h2>Module</h2>
+  <p>Was Staffora kann — kurz und klar.</p>
+</section>
+<div class="feat-grid">
+  <div class="feat" style="animation-delay:.02s"><div class="ic">🎫</div><strong>Tickets</strong><span>Support öffnen, claimen, schließen mit Transcript.</span></div>
+  <div class="feat" style="animation-delay:.08s"><div class="ic">✍️</div><strong>Text Generator</strong><span>Ankündigungen aus Stichworten — mit API oder Template.</span></div>
+  <div class="feat" style="animation-delay:.11s"><div class="ic">🏠</div><strong>Häuser &amp; Beleg-Scan</strong><span>Hausliste, Status, Beleg-Text erkennen und zuordnen.</span></div>
+  <div class="feat" style="animation-delay:.14s"><div class="ic">🔨</div><strong>Ingame Ban Log</strong><span>Warns, Bans, Akte im IC Panel.</span></div>
+  <div class="feat" style="animation-delay:.17s"><div class="ic">🖐️</div><strong>Dizzy Control</strong><span>Roblox-Name im Kanal, Staff bestätigt.</span></div>
+  <div class="feat" style="animation-delay:.2s"><div class="ic">🪪</div><strong>Ausweis</strong><span>Perso zuerst, dann Zusatz — Häuser auf dem Ausweis.</span></div>
+  <div class="feat" style="animation-delay:.23s"><div class="ic">👮</div><strong>Duty / Online</strong><span>On/Off über IC Panel, Liste mit/ohne Rechte.</span></div>
+  <div class="feat" style="animation-delay:.26s"><div class="ic">⭐</div><strong>Feedback &amp; XP</strong><span>Sterne-Panel, XP für Tickets und Calls.</span></div>
+  <div class="feat" style="animation-delay:.29s"><div class="ic">🔓</div><strong>Ban Appeal</strong><span>Unban per Roblox-Name und Fragen.</span></div>
+</div>
+
+<section class="demo-head" id="demo">
+  <h2>Sieh alles <b>live in Aktion</b></h2>
+  <p>Modul wählen — Simulation im Browser, kein Login nötig.</p>
+</section>
+
+<div class="stage">
+  <div class="mods" id="mods">
+    <div class="mod on" data-k="tickets"><div class="ic">🎫</div><div><strong>Ticket System</strong><span>Support-Workflow</span></div><span class="arrow">›</span></div>
+        <div class="mod" data-k="warteraum"><div class="ic">🎧</div><div><strong>Warteraum</strong><span>Support + Musik</span></div><span class="arrow">›</span></div>
+    <div class="mod" data-k="fraktion"><div class="ic">🏴</div><div><strong>Fraktionen</strong><span>Warn &amp; Bewerbung</span></div><span class="arrow">›</span></div>
+    <div class="mod" data-k="duty"><div class="ic">🟢</div><div><strong>Duty</strong><span>On / Off</span></div><span class="arrow">›</span></div>
+    <div class="mod" data-k="houses"><div class="ic">🏠</div><div><strong>Häuser</strong><span>Beleg-Scan</span></div><span class="arrow">›</span></div>
+    <div class="mod" data-k="dizzy"><div class="ic">🖐️</div><div><strong>Dizzy Control</strong><span>Roblox-Link</span></div><span class="arrow">›</span></div>
+  </div>
+  <div id="preview" class="win"></div>
+</div>
+<p class="hint">Nur Vorschau — echte Steuerung läuft über Dashboard und Discord-Bot.</p>
+<p class="foot">STAFFORA BOT</p>
+<div class="corner">
+  <a href="./dashboard.html">Dashboard</a>
+  <a href="./ingame.html">IC Panel</a>
+  <a href="./unban.html">Ban Appeal</a>
+</div>
+
+<script>
+(function(){
+  var cloud='https://staffora.apps.bot-hosting.cloud';
+  var host=location.hostname||'';
+  var API=(host.indexOf('bot-hosting')>=0||host==='localhost'||host==='127.0.0.1')?'':cloud;
+  var ret=location.origin+location.pathname.replace(/[^/]*$/,'')+'dashboard.html';
+  document.getElementById('login').href=API+'/auth/login?return='+encodeURIComponent(ret);
+
+  var timers=[];
+  function clearT(){ timers.forEach(clearTimeout); timers=[]; }
+  function later(fn,ms){ timers.push(setTimeout(fn,ms)); }
+  function shell(url, sideHtml, mainHtml){
+    return '<div class="bar"><span class="d r"></span><span class="d y"></span><span class="d g"></span>'+
+      '<span style="flex:1;text-align:center">'+url+'</span><span class="live"><i></i>LIVE</span></div>'+
+      '<div class="body"><div class="side">'+sideHtml+'</div><div class="main" id="m">'+mainHtml+'</div></div>';
+  }
+
+  function runTickets(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Tickets','<h5>Panel</h5><a class="on">#support</a>',
+      '<h2>Staffora Support</h2><div class="sub">Ticket-Art wählen</div><div class="card" id="tk">Support · Allgemein</div><div class="btnrow"><button class="btn-sm">Öffnen</button></div>');
+    later(function(){
+      el.innerHTML=shell('staffora · Tickets','<h5>Kanal</h5><a class="on">#ticket-support-max</a>',
+        '<h2>🎫 Support Ticket</h2><div class="sub">Status: Offen — wartet auf Übernahme</div><div class="btnrow"><button class="btn-sm g">Übernehmen</button></div>');
+    },1400);
+    later(function(){
+      el.innerHTML=shell('staffora · Tickets','<h5>Kanal</h5><a class="on">#ticket-support-max</a>',
+        '<h2>🎫 Support Ticket</h2><div class="sub">Übernommen von @Sup</div><div class="btnrow"><button class="btn-sm">Freigeben</button><button class="btn-sm">Close</button><button class="btn-sm">Close Request</button></div>');
+    },2800);
+  }
+
+  function runIngame(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Ingame','<h5>Panel</h5><a class="on">Lookup</a>',
+      '<h2>Spielerakte</h2><div class="card"><strong>MaxPower</strong><div class="sub">2 Warns · 1 Kick</div></div>');
+  }
+
+  function runDizzy(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Dizzy','<h5>Kanal</h5><a class="on">#verifikation</a>',
+      '<h2>Dizzy Control</h2><div class="card">↳ Schreibe deinen Roblox-Namen hier rein</div><div id="dz"></div>');
+    later(function(){ document.getElementById('dz').innerHTML='<div class="msg"><div class="av u">J</div><div class="bubble"><div class="who">Jonas_S</div>MaxPower_2024</div></div>'; },800);
+    later(function(){ document.getElementById('dz').insertAdjacentHTML('beforeend','<div class="card"><strong>Verknüpfung prüfen</strong><div class="sub">Wartet auf Staff</div><div class="btnrow"><button class="btn-sm g">Bestätigen</button></div></div>'); },2000);
+  }
+
+
+  function runWarteraum(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Warteraum','<h5>Voice</h5><a class="on">🔊 Support-Warte</a>',
+      '<h2>Neuer Support-Fall</h2><div class="card" id="wr"><div class="sub">User joint Warteraum…</div></div>');
+    later(function(){ document.getElementById('wr').innerHTML='<strong>🆕 Support</strong><div class="sub">@Max · Wartet</div><div class="btnrow"><button class="btn-sm g">Übernehmen</button></div>'; },900);
+    later(function(){ document.getElementById('wr').innerHTML='<strong>🛠️ In Bearbeitung</strong><div class="sub">@Max · Staff: @Sup</div><div class="sub">🔊 Support – Max · 00:42</div>'; },2200);
+  }
+  function runDuty(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Duty','<h5>Panel</h5><a class="on">On Duty</a>',
+      '<h2>Staff Status</h2><div class="row"><div><strong>Alex</strong><br><small>mit Admin</small></div><span class="chip g">Online</span></div><div class="row"><div><strong>Sam</strong><br><small>ohne Admin</small></div><span class="chip a">Online</span></div>');
+  }
+  function runAusweis(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Ausweis','<h5>Antrag</h5><a class="on">Personalausweis</a>',
+      '<h2>Neuer Antrag</h2><div class="card"><strong>MaxPower</strong><div class="sub">Personalausweis · ausstehend</div><div class="btnrow"><button class="btn-sm g">Annehmen</button><button class="btn-sm">Ablehnen</button></div></div>');
+  }
+  function runFraktion(){
+    var el=document.getElementById('preview');
+    el.innerHTML=shell('staffora · Fraktion','<h5>Legal / Illegal</h5><a class="on">Verwaltung</a>',
+      '<h2>Fraktion Warn</h2><div class="card"><strong>Los Santos PD</strong><div class="sub">Warn 1/3 · FailRP</div></div>');
+  }
+
+  var runners=
+{tickets:runTickets,warteraum:runWarteraum,duty:runDuty,ausweis:runAusweis,ingame:runIngame,fraktion:runFraktion,dizzy:runDizzy};
+  document.querySelectorAll('.mod').forEach(function(m){
+    m.onclick=function(){
+      document.querySelectorAll('.mod').forEach(function(x){x.classList.remove('on')});
+      m.classList.add('on'); clearT(); (runners[m.getAttribute('data-k')]||runTickets)();
+    };
+  });
+  runTickets();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ban Appeal · STAFFORA BOT</title>
+<script>window.STAFFORA_API="https://staffora.apps.bot-hosting.cloud";</script>
+<style>
+:root{--bg:#0b0b0d;--panel:#111114;--card:#16161a;--border:#2a2a30;--text:#f4f4f5;--muted:#9ca3af;--accent:#7c3aed;--ok:#34d399;--err:#f87171}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.45;
+  background-image:radial-gradient(ellipse 70% 45% at 50% -10%,rgba(124,58,237,.18),transparent 55%)}
+.wrap{max-width:480px;margin:0 auto;padding:40px 18px 60px}
+.logo{width:48px;height:48px;border-radius:14px;margin:0 auto 14px;background:linear-gradient(145deg,#a78bfa,#6d28d9);display:grid;place-items:center;font-size:20px}
+h1{text-align:center;font-size:1.35rem;margin-bottom:6px}
+.sub{text-align:center;color:var(--muted);font-size:14px;margin-bottom:22px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px}
+.field{margin-bottom:12px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;font-weight:500}
+.field input,.field textarea,select{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--border);background:#0a0a0e;color:var(--text);font:inherit}
+.field input:focus,.field textarea:focus,select:focus{outline:0;border-color:var(--accent)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:11px 16px;border-radius:10px;border:0;cursor:pointer;font-weight:600;font-size:14px}
+.btn-p{background:linear-gradient(135deg,#8b5cf6,#7c3aed);color:#fff}
+.btn-g{background:transparent;border:1px solid var(--border);color:var(--text);margin-top:8px}
+.msg{padding:10px 12px;border-radius:10px;font-size:13px;margin-bottom:12px}
+.msg.err{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.25);color:var(--err)}
+.msg.info{background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.25);color:#c4b5fd}
+.msg.ok{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25);color:var(--ok)}
+.hidden{display:none!important}
+.steps{display:flex;justify-content:center;gap:8px;margin-bottom:20px}
+.steps span{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:#1a1a22;color:var(--muted);border:1px solid var(--border)}
+.steps span.on{background:rgba(139,92,246,.2);color:#c4b5fd;border-color:rgba(139,92,246,.4)}
+.server-btn{width:100%;text-align:left;padding:12px 14px;margin-bottom:8px;border-radius:10px;border:1px solid var(--border);background:#0a0a0e;color:var(--text);cursor:pointer;font-weight:600}
+.server-btn:hover{border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">🤖</div>
+  <h1>Ban Appeal</h1>
+  <p class="sub">Roblox-Name eingeben · Ban prüfen · Antrag stellen</p>
+  <div class="steps">
+    <span id="s1" class="on">1</span>
+    <span id="s2">2</span>
+    <span id="s3">3</span>
+    <span id="s4">4</span>
+  </div>
+  <div id="msg" class="msg hidden"></div>
+
+  <div id="step-user" class="card">
+    <div class="field">
+      <label>Roblox-Name</label>
+      <input id="roblox-user" placeholder="Dein Roblox-Name" autocomplete="username"/>
+    </div>
+    <button type="button" class="btn btn-p" id="btn-next">Weiter</button>
+  </div>
+
+  <div id="step-server" class="card hidden">
+    <p class="sub" style="text-align:left;margin-bottom:12px">Server wählen</p>
+    <div id="server-list"></div>
+    <button type="button" class="btn btn-g" id="btn-back1">Zurück</button>
+  </div>
+
+  <div id="step-form" class="card hidden">
+    <p class="sub" style="text-align:left;margin-bottom:8px" id="form-user"></p>
+    <div id="questions"></div>
+    <div class="field">
+      <label>Discord-Name oder ID (optional)</label>
+      <input id="discord-id" placeholder="optional"/>
+    </div>
+    <button type="button" class="btn btn-p" id="btn-submit">Antrag absenden</button>
+    <button type="button" class="btn btn-g" id="btn-back2">Zurück</button>
+  </div>
+
+  <div id="step-done" class="card hidden" style="text-align:center">
+    <p style="font-size:28px;margin-bottom:8px">✅</p>
+    <p style="font-weight:600;margin-bottom:6px">Antrag gesendet</p>
+    <p class="sub">Das Team prüft deine Anfrage.</p>
+    <button type="button" class="btn btn-g" id="btn-again">Neuen Antrag</button>
+  </div>
+</div>
+<script>
+(function(){
+  var API = window.STAFFORA_API || '';
+  var state = { name: null, id: null, guildId: null, questions: [] };
+
+  function $(id){ return document.getElementById(id); }
+  function showMsg(t, ty){
+    var m = $('msg');
+    m.textContent = t;
+    m.className = 'msg ' + (ty || 'info');
+    m.classList.remove('hidden');
+  }
+  function hideMsg(){ $('msg').classList.add('hidden'); }
+  function setStep(n){
+    for (var i = 1; i <= 4; i++) {
+      var el = $('s' + i);
+      if (el) el.className = i <= n ? 'on' : '';
+    }
+  }
+  function hideAll(){
+    ['step-user','step-server','step-form','step-done'].forEach(function(id){
+      $(id).classList.add('hidden');
+    });
+  }
+
+  async function api(path, opts){
+    opts = opts || {};
+    var r = await fetch(API + path, {
+      method: opts.method || 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      body: opts.body ? JSON.stringify(opts.body) : undefined
+    });
+    var data = null;
+    try { data = await r.json(); } catch(e) {}
+    if (!r.ok) throw new Error((data && (data.error || data.message)) || ('HTTP ' + r.status));
+    return data;
+  }
+
+  async function loadServers(){
+    $('server-list').innerHTML = '<p class="sub">Lädt…</p>';
+    var data = await api('/api/public/unban/servers');
+    var list = data.servers || data || [];
+    if (!list.length) {
+      $('server-list').innerHTML = '<p class="sub">Kein Server verfügbar.</p>';
+      return;
+    }
+    var seen={};
+    list = list.filter(function(g){ var id=String(g.id); if(seen[id]) return false; seen[id]=1; return true; });
+    $('server-list').innerHTML = list.map(function(g){
+      return '<button type="button" class="server-btn" data-gid="'+g.id+'">'+(g.name||g.id)+'</button>';
+    }).join('');
+    $('server-list').querySelectorAll('[data-gid]').forEach(function(btn){
+      btn.onclick = function(){ pickServer(btn.getAttribute('data-gid'), btn.textContent); };
+    });
+  }
+
+  async function pickServer(guildId, name){
+    state.guildId = guildId;
+    hideMsg();
+    try {
+      var data = await api('/api/public/guilds/'+guildId+'/unban/check', {
+        method: 'POST',
+        body: { robloxUsername: state.name }
+      });
+
+      // Appeals disabled / not ok
+      if (!data.ok) {
+        var msg = data.message || data.reason || 'Es sind keine Bans auf deinem Konto registriert.';
+        // soft info for "no bans", error for disabled/pending
+        var ty = /keine (aktiven )?Bans/i.test(msg) ? 'info' : 'err';
+        hideAll();
+        $('step-user').classList.remove('hidden');
+        setStep(1);
+        showMsg(msg, ty);
+        return;
+      }
+
+      state.id = data.robloxUserId || state.id;
+      state.name = data.robloxUsername || state.name;
+      state.questions = data.questions || [];
+      $('form-user').textContent = 'Antrag für ' + state.name;
+      var q = '';
+      state.questions.forEach(function(q0){
+        q += '<div class="field"><label>'+(q0.label||q0.key)+(q0.required?' *':'')+
+          '</label><textarea data-key="'+q0.key+'" '+(q0.required?'required':'')+'></textarea></div>';
+      });
+      $('questions').innerHTML = q || '<p class="sub">Keine zusätzlichen Fragen.</p>';
+      hideAll();
+      $('step-form').classList.remove('hidden');
+      setStep(3);
+    } catch(e) {
+      showMsg(e.message, 'err');
+    }
+  }
+
+  $('btn-next').onclick = async function(){
+    var user = $('roblox-user').value.trim();
+    if (!user) return showMsg('Bitte Roblox-Name eingeben', 'err');
+    hideMsg();
+    this.disabled = true;
+    try {
+      state.name = user;
+      state.id = null;
+      hideAll();
+      $('step-server').classList.remove('hidden');
+      setStep(2);
+      await loadServers();
+    } catch(e) {
+      showMsg(e.message, 'err');
+      $('step-user').classList.remove('hidden');
+      setStep(1);
+    } finally {
+      this.disabled = false;
+    }
+  };
+
+  $('btn-back1').onclick = function(){
+    hideAll(); hideMsg();
+    $('step-user').classList.remove('hidden');
+    setStep(1);
+  };
+  $('btn-back2').onclick = function(){
+    hideAll(); hideMsg();
+    $('step-server').classList.remove('hidden');
+    setStep(2);
+  };
+
+  $('btn-submit').onclick = async function(){
+    var answers = {};
+    var missing = false;
+    document.querySelectorAll('#questions textarea').forEach(function(el){
+      answers[el.getAttribute('data-key')] = el.value.trim();
+      if (el.required && !el.value.trim()) missing = true;
+    });
+    if (missing) return showMsg('Bitte alle Pflichtfelder ausfüllen', 'err');
+    this.disabled = true;
+    try {
+      await api('/api/public/guilds/'+state.guildId+'/unban/submit', {
+        method: 'POST',
+        body: {
+          robloxUsername: state.name,
+          robloxUserId: state.id,
+          discordId: $('discord-id').value.trim() || null,
+          answers: answers
+        }
+      });
+      hideAll(); hideMsg();
+      setStep(4);
+      $('step-done').classList.remove('hidden');
+    } catch(e) {
+      showMsg(e.message, 'err');
+    } finally {
+      this.disabled = false;
+    }
+  };
+
+  $('btn-again').onclick = function(){
+    state = { name: null, id: null, guildId: null, questions: [] };
+    $('roblox-user').value = '';
+    hideAll(); hideMsg();
+    $('step-user').classList.remove('hidden');
+    setStep(1);
+  };
+})();
+</script>
+</body>
+</html>
